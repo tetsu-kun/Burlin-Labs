@@ -146,11 +146,11 @@ void continue_work(cs& c)
 
 
 void PrintMenu() {
-	cout << "1. Загрузить из файла" << endl;
-	cout << "2. Создать трубу" << endl;
-	cout << "3. Создать компрессорную станцию" << endl;
+	cout << "1. Создать трубу" << endl;
+	cout << "2. Создать компрессорную станцию" << endl;
+	cout << "3. Вывести информацию" << endl;
 	cout << "4. Изменить состояние с трубы" << endl;
-	cout << "5. Вывести информацию" << endl;
+	cout << "5. Загрузить файл" << endl;
 	cout << "6. Сохранить в файл" << endl;
 	cout << "7. Обновить компрессорную станцию" << endl;
 	cout << "0. Выход" << endl;
@@ -170,21 +170,21 @@ int main()
 		switch (i)
 		{
 		case 1:
-			t = load_from_fileT();
-			c = load_from_fileC();
-			break;
-		case 2: 
 			t = create_truba();
 			break;
-		case 3:
+		case 2: 
 			c = create_cs();
+			break;
+		case 3:
+			write_truba_info(t);
+			write_cs_info(c);
 			break;
 		case 4:
 			change_status(t.repair);
 			break;
 		case 5:
-			write_truba_info(t);
-			write_cs_info(c);
+			t = load_from_fileT();
+			c = load_from_fileC();
 			break;
 		case 6:
 			save_to_fileTC(t, c);
