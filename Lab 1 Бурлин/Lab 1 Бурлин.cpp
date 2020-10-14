@@ -5,7 +5,7 @@
 using namespace std;
 
 
-struct truba{       //Стуктура тубы
+struct truba {       //Стуктура тубы
 	int id;
 	double length;
 	double diameter;
@@ -20,7 +20,7 @@ struct cs {         //Структура компрессорной станци
 	double effect;
 };
 
-bool check_value(int x) {                  
+bool check_value(int x) {
 	return x > 0 ? true : false;
 }
 bool check_value(double x) {
@@ -49,7 +49,7 @@ truba create_truba() {                          //Создание трубы (�
 
 cs create_cs() {                             //Создание КС (ввод данных)
 	cs new_cs;
-	cout <<"Введите имя: " << endl;
+	cout << "Введите имя: " << endl;
 	cin >> new_cs.name;
 	do {
 		cin.clear();
@@ -86,7 +86,7 @@ void print_cs_info(const cs& c)                              //Вывод в к�
 	cout << "имя:" << c.name << endl;
 	cout << "кол-во цехов: " << c.number_work << endl;
 	cout << "Кол-во рабочих цехов: " << c.number_inwork << endl;
-	cout << "Эффективность: " << c.effect <<endl ;
+	cout << "Эффективность: " << c.effect << endl;
 }
 
 
@@ -95,7 +95,7 @@ void change_status(bool& status) {                            //Изменени
 }
 
 
-void save_to_fileT-CS(truba t, cs c) {                         //Сохранение в файл
+void save_to_fileT - CS(truba t, cs c) {                         //Сохранение в файл
 	ofstream fout;
 	fout.open("DataTruba.txt", ios::out);
 	if (fout.is_open()) {
@@ -135,11 +135,11 @@ cs load_from_fileCS() {                                        //Загрузк�
 }
 
 
-void stop_work(cs& c) 
+void stop_work(cs& c)
 {
 	c.number_inwork--;
 }
-void continue_work(cs& c) 
+void continue_work(cs& c)
 {
 	c.number_inwork++;
 }
@@ -173,7 +173,7 @@ int main()
 		case 1:
 			t = create_truba();
 			break;
-		case 2: 
+		case 2:
 			c = create_cs();
 			break;
 		case 3:
