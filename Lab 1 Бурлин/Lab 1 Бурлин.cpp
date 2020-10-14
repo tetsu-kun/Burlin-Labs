@@ -109,7 +109,7 @@ void save_to_fileTCS(truba t, cs c) {                         //Сохранен
 
 truba load_from_fileT() {                                   //Загрузка из файла трубы
 	ifstream fin;
-	fin.open("DataTruba.txt", ios::in);
+	fin.open("Data.txt", ios::in);
 	truba t;
 	if (fin.is_open()) {
 		fin >> t.id;
@@ -122,7 +122,7 @@ truba load_from_fileT() {                                   //Загрузка �
 }
 cs load_from_fileCS() {                                        //Загрузка из файла КС
 	ifstream fin;
-	fin.open("DataCS.txt", ios::in);
+	fin.open("Data.txt", ios::in);
 	cs c;
 	if (fin.is_open()) {
 		fin >> c.id;
@@ -192,6 +192,9 @@ int main()
 			save_to_fileTCS(t, c);
 			break;
 		case 7:
+
+			break;
+		/*case 7:
 			cout << "\t Выберите действие:" << endl;
 			cout << "\t 1. Начало работы" << endl;
 			cout << "\t 2. Прекращение работы" << endl;
@@ -211,7 +214,7 @@ int main()
 				cout << "Выберите действие: " << endl;
 				break;
 			}
-			break;
+			break;*/
 		case 0:
 			return 0;
 			break;
