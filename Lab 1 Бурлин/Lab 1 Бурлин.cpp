@@ -95,11 +95,12 @@ void change_status(bool& status) {                            //Изменени
 }
 
 
-void save_to_fileT - CS(truba t, cs c) {                         //Сохранение в файл
+void save_to_fileTCS(truba t, cs c) {                         //Сохранение в файл
 	ofstream fout;
-	fout.open("DataTruba.txt", ios::out);
+	fout.open("Data.txt", ios::out);
 	if (fout.is_open()) {
 		fout << t.id << endl << t.diameter << endl << t.length << endl << t.repair;
+		fout << c.id << endl << c.name << endl << c.number_work << endl << c.number_inwork << endl << c.effect;
 		fout.close();
 	}
 }
@@ -150,7 +151,7 @@ void PrintMenu() {
 	cout << "1. Создать трубу" << endl;
 	cout << "2. Создать компрессорную станцию" << endl;
 	cout << "3. Вывести информацию" << endl;
-	cout << "4. Изменить состояние с трубы" << endl;
+	cout << "4. Изменить состояние трубы" << endl;
 	cout << "5. Загрузить файл" << endl;
 	cout << "6. Сохранить в файл" << endl;
 	cout << "7. Обновить компрессорную станцию" << endl;
@@ -188,7 +189,7 @@ int main()
 			c = load_from_fileCS();
 			break;
 		case 6:
-			save_to_fileTC(t, c);
+			save_to_fileTCS(t, c);
 			break;
 		case 7:
 			cout << "\t Выберите действие:" << endl;
