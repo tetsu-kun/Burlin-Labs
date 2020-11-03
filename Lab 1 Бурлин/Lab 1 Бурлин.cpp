@@ -194,27 +194,6 @@ int main()
 		case 7:
 
 			break;
-		/*case 7:
-			cout << "\t Выберите действие:" << endl;
-			cout << "\t 1. Начало работы" << endl;
-			cout << "\t 2. Прекращение работы" << endl;
-			cout << "\t 0. Назад" << endl;
-			cin >> i;
-			switch (i)
-			{
-			case 1:
-				continue_work(c);
-				break;
-			case 2:
-				stop_work(c);
-				break;
-			case 0:
-				break;
-			default:
-				cout << "Выберите действие: " << endl;
-				break;
-			}
-			break;*/
 		case 0:
 			return 0;
 			break;
