@@ -70,8 +70,8 @@ void print_truba_info(const truba& t)                       //Вывод в ко
 }
 void print_cs_info(const cs& c)                              //Вывод в консоль информации о КС
 {
-	cout << "имя:" << c.name << endl;
-	cout << "кол-во цехов: " << c.number_work << endl;
+	cout << "Имя:" << c.name << endl;
+	cout << "Кол-во цехов: " << c.number_work << endl;
 	cout << "Кол-во рабочих цехов: " << c.number_inwork << endl;
 	cout << "Эффективность: " << c.effect << endl;
 }
@@ -123,13 +123,22 @@ cs load_from_fileCS() {                                        //Загрузк�
 }
 
 
-void stop_work(cs& c)
-{
-	c.number_inwork--;
+void stop_work(cs& c) {
+	if (c.number_inwork > 0) {
+		c.number_inwork--;
+	}
+	else {
+		cout << "Число работающих цехов: 0" << endl;
+	}
 }
-void continue_work(cs& c)
-{
-	c.number_inwork++;
+
+void continue_work(cs& c) {
+	if (c.number_inwork < c.number_workshops) {
+		c.number_inwork++;
+	}
+	else {
+		cout << "Все цеха работают" << endl;
+	}
 }
 
 
@@ -184,6 +193,27 @@ int main()
 			save_to_fileTCS(t, c);
 			break;
 		case 7:
+			if (comp.id == -1) {
+				cout << "\t Выберите действие:" << endl;
+				cout << "\t 1. Начать" << endl;
+				cout << "\t 2. Остановить" << endl;
+				i = get_value(1, 2);
+				switch (i)
+				{
+				case 1:
+					continue_work(c);
+					break;
+				case 2:
+					stop_work(c);
+					break;
+				default:
+					cout << "Выбирите действие " << endl;
+					break;
+				}
+			}
+			else {
+				cout << "Компрессорной станции не существует" << endl;
+			}
 
 			break;
 		case 0:
