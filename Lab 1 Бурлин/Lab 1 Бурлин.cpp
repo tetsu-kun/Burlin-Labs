@@ -20,58 +20,45 @@ struct cs {         //Структура компрессорной станци
 	double effect;
 };
 
-bool check_value(int x) {
-	return x > 0 ? true : false;
-}
-bool check_value(double x) {
-	return x > 0 ? true : false;
+
+template <typename S>
+S get_value(T left_border, T right_border) {
+	S i;
+	cin >> i;
+	while (cin.fail() || i > right_border || i < left_border) {
+		cout << "Введите другое значение" << "(" << left_border << " - " << right_border << ")" << endl;
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cin >> i;
+	}
+	return i;
 }
 
 
-truba create_truba() {                          //Создание трубы (ввод данных)
+truba create_truba() {
 	truba new_truba;
-	do {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Введите диаметр: " << endl;
-		cin >> new_truba.diameter;
-	} while (!check_value(new_truba.diameter) || cin.fail());
-	do {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Введит длину: " << endl;
-		cin >> new_truba.length;
-	} while (!check_value(new_truba.length) || cin.fail());
+	cout << "Введите диаметр: " << endl;
+	new_truba.diameter = get_value(1, 3000);
+	cout << "Ввелите длинну: " << endl;
+	new_truba.length = get_value(1, 10000);
 	new_truba.repair = false;
-	new_truba.id = -1;
-	return new_truba;
+	new_truba.id = 1;
+	return new_pipe;
 }
 
-cs create_cs() {                             //Создание КС (ввод данных)
+cs create_cs() {
 	cs new_cs;
-	cout << "Введите имя: " << endl;
-	cin >> new_cs.name;
-	do {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Введите кол-во цехов: " << endl;
-		cin >> new_cs.number_work;
-	} while (!check_value(new_cs.number_work) || cin.fail());
-	do {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Введите кол-во рабочих цехов: " << endl;
-		cin >> new_cs.number_inwork;
-	} while (!(check_value(new_cs.number_inwork) && (new_cs.number_inwork <= new_cs.number_work)) || cin.fail());
-
-	do {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Введите эффективность: " << endl;
-		cin >> new_cs.effect;
-	} while (!check_value(new_cs.effect) || cin.fail());
-	new_cs.id = -1;
-	return new_cs;
+	cout << "Введите имя:";
+	cin.ignore(256, '\n');
+	getline(cin, new_cs.Name, '\n');
+	cout << "Введите число цехов: " << endl;
+	new_cs.number_workshops = get_value(1, 100);
+	cout << "Введите число работающих цехов: " << endl;
+	new_cs.number_inwork = get_value(0, new_compressor.number_workshops);
+	cout << "Введите эффективность: " << endl;
+	new_cs.effect = get_value(0, 100);
+	new_cs.id = 1;
+	return new_compressor;
 }
 
 void print_truba_info(const truba& t)                       //Вывод в консоль информации о трубе
@@ -182,7 +169,7 @@ int main()
 			print_cs_info(c);
 			break;
 		case 4:
-			if (p.id == -1) {
+			if (p.id == 1) {
 				change_status(t.repair);
 			}
 			else {
