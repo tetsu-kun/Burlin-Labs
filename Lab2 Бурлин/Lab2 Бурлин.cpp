@@ -19,12 +19,14 @@ struct cs { //Структура компрессорной станции
 	double effect;
 };
 
+
+
 template <typename T>
 T get_value(T left_border, T right_border) {
 	T i;
 	cin >> i;
 	while (cin.fail() || i > right_border || i < left_border) {
-		cout << "Vvedite udovl znachenie " << "(" << left_border << " - " << right_border << ")" << endl;
+		cout << "Введите корректное значение" << "(" << left_border << " - " << right_border << ")" << endl;
 		cin.clear();
 		cin.ignore(10000, '\n');
 		cin >> i;
