@@ -152,7 +152,7 @@ void PrintMenu() {
 	cout << "2. Создать компрессорную станцию" << endl;
 	cout << "3. Вывести информацию" << endl;
 	cout << "4. Изменить состояние трубы" << endl;
-	cout << "5. Загрузить файл" << endl;
+	cout << "5. Загрузить из файла" << endl;
 	cout << "6. Сохранить в файл" << endl;
 	cout << "7. Обновить компрессорную станцию" << endl;
 	cout << "0. Выход" << endl;
@@ -182,7 +182,12 @@ int main()
 			print_cs_info(c);
 			break;
 		case 4:
-			change_status(t.repair);
+			if (p.id == -1) {
+				change_status(t.repair);
+			}
+			else {
+				cout << "Трубы не существет" << endl;
+			}
 			break;
 		case 5:
 			t = load_from_fileT();
