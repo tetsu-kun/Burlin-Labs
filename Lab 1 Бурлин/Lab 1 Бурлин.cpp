@@ -68,6 +68,7 @@ void print_truba_info(const truba& t)                       //Вывод в ко
 	cout << "id: " << t.id << endl;
 	cout << (t.repair ? "В ремонте" : "Не в ремонте") << endl;
 }
+
 void print_cs_info(const cs& c)                              //Вывод в консоль информации о КС
 {
 	cout << "Имя:" << c.name << endl;
@@ -82,11 +83,12 @@ void change_status(bool& status) {                            //Изменени
 }
 
 
-void save_to_fileTCS(truba t, cs c) {                         //Сохранение в файл
+void save_to_fileTCS(truba t, cs c) 
+{                         //Сохранение в файл
 	ofstream fout;
 	fout.open("Data.txt", ios::out);
 	if (fout.is_open()) {
-		fout << t.id << endl << t.diameter << endl << t.length << endl << t.repair;
+		fout << t.id << endl << t.diameter << endl << t.length << endl << t.repair << endl;
 		fout << c.id << endl << c.name << endl << c.number_work << endl << c.number_inwork << endl << c.effect;
 		fout.close();
 	}
@@ -94,36 +96,38 @@ void save_to_fileTCS(truba t, cs c) {                         //Сохранен
 
 
 
-truba load_from_fileT() {                                   //Загрузка из файла трубы
-	ifstream fin;
-	fin.open("Data.txt", ios::in);
+
+truba load_from_fileP(ifstream& fin) 
+{
 	truba t;
-	if (fin.is_open()) {
-		fin >> t.id;
-		fin >> t.diameter;
-		fin >> t.length;
-		fin >> t.repair;
-		fin.close();
-		return t;
-	}
+	fin >> t.id >> p.diameter >> p.length >> p.under_repair;
+	return t;
 }
-cs load_from_fileCS() {                                        //Загрузка из файла КС
+
+cs load_from_fileC(ifstream& fin)
+{
+	cs c;
+	fin >> c.id;
+	fin.ignore(256, '\n');
+	getline(fin, c.Name);
+	fin >> c.number_work >> c.number_inwork >> c.effect;
+	return c;
+}
+
+void load_from_fileTCS(truba& t, cs& c) 
+{
 	ifstream fin;
 	fin.open("Data.txt", ios::in);
-	cs c;
 	if (fin.is_open()) {
-		fin >> c.id;
-		fin >> c.name;
-		fin >> c.number_work;
-		fin >> c.number_inwork;
-		fin >> c.effect;
-		return c;
+		t = load_from_fileP(fin);
+		c = load_from_fileC(fin);
 		fin.close();
 	}
 }
 
 
-void stop_work(cs& c) {
+void stop_work(cs& c) 
+{
 	if (c.number_inwork > 0) {
 		c.number_inwork--;
 	}
@@ -132,18 +136,22 @@ void stop_work(cs& c) {
 	}
 }
 
-void continue_work(cs& c) {
-	if (c.number_inwork < c.number_workshops) {
+void continue_work(cs& c) 
+{
+	if (c.number_inwork < c.number_work) 
+	{
 		c.number_inwork++;
 	}
-	else {
+	else 
+	{
 		cout << "Все цеха работают" << endl;
 	}
 }
 
 
 
-void PrintMenu() {
+void PrintMenu() 
+{
 	cout << "1. Создать трубу" << endl;
 	cout << "2. Создать компрессорную станцию" << endl;
 	cout << "3. Вывести информацию" << endl;
@@ -186,8 +194,7 @@ int main()
 			}
 			break;
 		case 5:
-			t = load_from_fileT();
-			c = load_from_fileCS();
+			load_from_fileTCS(t, c);
 			break;
 		case 6:
 			save_to_fileTCS(t, c);
