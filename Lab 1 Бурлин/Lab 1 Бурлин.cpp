@@ -22,7 +22,7 @@ struct cs {         //Структура компрессорной станци
 
 
 template <typename S>
-S get_value(T left_border, T right_border) {
+S get_value(S left_border, S right_border) {
 	S i;
 	cin >> i;
 	while (cin.fail() || i > right_border || i < left_border) {
@@ -43,22 +43,22 @@ truba create_truba() {
 	new_truba.length = get_value(1, 10000);
 	new_truba.repair = false;
 	new_truba.id = 1;
-	return new_pipe;
+	return new_truba;
 }
 
 cs create_cs() {
 	cs new_cs;
 	cout << "Введите имя:";
 	cin.ignore(256, '\n');
-	getline(cin, new_cs.Name, '\n');
+	getline(cin, new_cs.name, '\n');
 	cout << "Введите число цехов: " << endl;
-	new_cs.number_workshops = get_value(1, 100);
+	new_cs.number_work = get_value(1, 100);
 	cout << "Введите число работающих цехов: " << endl;
-	new_cs.number_inwork = get_value(0, new_compressor.number_workshops);
+	new_cs.number_inwork = get_value(0, new_cs.number_work);
 	cout << "Введите эффективность: " << endl;
 	new_cs.effect = get_value(0, 100);
 	new_cs.id = 1;
-	return new_compressor;
+	return new_cs;
 }
 
 void print_truba_info(const truba& t)                       //Вывод в консоль информации о трубе
@@ -83,8 +83,8 @@ void change_status(bool& status) {                            //Изменени
 }
 
 
-void save_to_fileTCS(truba t, cs c) 
-{                         //Сохранение в файл
+void save_to_fileTCS(truba t, cs c)                       //Сохранение в файл
+{                         
 	ofstream fout;
 	fout.open("Data.txt", ios::out);
 	if (fout.is_open()) {
@@ -97,10 +97,10 @@ void save_to_fileTCS(truba t, cs c)
 
 
 
-truba load_from_fileP(ifstream& fin) 
+truba load_from_fileT(ifstream& fin) 
 {
 	truba t;
-	fin >> t.id >> p.diameter >> p.length >> p.under_repair;
+	fin >> t.id >> t.diameter >> t.length >> t.repair;
 	return t;
 }
 
@@ -109,7 +109,7 @@ cs load_from_fileC(ifstream& fin)
 	cs c;
 	fin >> c.id;
 	fin.ignore(256, '\n');
-	getline(fin, c.Name);
+	getline(fin, c.name);
 	fin >> c.number_work >> c.number_inwork >> c.effect;
 	return c;
 }
@@ -119,7 +119,7 @@ void load_from_fileTCS(truba& t, cs& c)
 	ifstream fin;
 	fin.open("Data.txt", ios::in);
 	if (fin.is_open()) {
-		t = load_from_fileP(fin);
+		t = load_from_fileT(fin);
 		c = load_from_fileC(fin);
 		fin.close();
 	}
@@ -186,7 +186,7 @@ int main()
 			print_cs_info(c);
 			break;
 		case 4:
-			if (p.id == 1) {
+			if (t.id == 1) {
 				change_status(t.repair);
 			}
 			else {
@@ -200,7 +200,7 @@ int main()
 			save_to_fileTCS(t, c);
 			break;
 		case 7:
-			if (comp.id == -1) {
+			if (c.id == 1) {
 				cout << "\t Выберите действие:" << endl;
 				cout << "\t 1. Начать" << endl;
 				cout << "\t 2. Остановить" << endl;
