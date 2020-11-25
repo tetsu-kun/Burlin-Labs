@@ -1,9 +1,13 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include "Truba.h"
+#include "CS.h"
 using namespace std;
 
 
+
+/*
 struct truba {       //Стуктура тубы
 	int id;
 	double length;
@@ -11,7 +15,8 @@ struct truba {       //Стуктура тубы
 	bool repair;
 };
 
-struct cs {         //Структура компрессорной станции
+struct cs 
+{                        //Структура компрессорной станции
 	int id;
 	string name;
 	int number_work;
@@ -233,4 +238,4 @@ int main()
 	}
 }
 
-
+*/
