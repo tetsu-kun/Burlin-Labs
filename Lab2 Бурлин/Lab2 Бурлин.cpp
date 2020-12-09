@@ -1,41 +1,38 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <unordered_map>
 #include "Truba.h"
 #include "CS.h"
 #include "utils.h"
 using namespace std;
 
-void save_to_file(const vector<Truba>& t, const vector<CS>& c) 
-{
+void save_to_file(const unordered_map<int, Truba>& t, const unordered_map<int, CS>& c) {
 	ofstream fout;
 	string filename;
-	cout << "Введите имя файла:" << endl;
+	cout << "Введите название файла: " << std::endl;
 	cin.ignore(256, '\n');
 	getline(cin, filename, '\n');
 	fout.open(filename, ios::out);
 	if (fout.is_open()) {
 		fout << t.size() << endl << c.size() << endl;
-		for (const Truba& it : t)
+		for (const auto& it : t)
 		{
-			fout << it;
+			fout << it.second;
 		}
-		for (const CS& it : c)
+		for (const auto& it : c)
 		{
-			fout << it;
+			fout << it.second;
 		}
 		fout.close();
 	}
 }
 
-void load_from_file(const vector <Truba>& t, const vector <CS>& c) 
-{
+void load_from_file(unordered_map <int, Truba>& t, unordered_map <int, CS>& c) {
 	ifstream fin;
 	int countT, countC;
 	string filename;
-	cout << "Введите имя файла:" << std::endl;
+	cout << "Введите название файла: " << std::endl;
 	cin.ignore(256, '\n');
 	getline(cin, filename, '\n');
 	fin.open(filename, ios::in);
@@ -47,32 +44,39 @@ void load_from_file(const vector <Truba>& t, const vector <CS>& c)
 		{
 			Truba LoadedTruba;
 			fin >> LoadedTruba;
-			t.push_back(LoadedTruba);
+		    t.insert({ LoadedTruba.Getid(),LoadedTruba });
 		}
 		for (int i = 0; i < countC; i++)
 		{
 			CS LoadedCS;
 			fin >> LoadedCS;
-			c.push_back(LoadedCS);
+			c.insert({ LoadedCS.Getid(), LoadedCS });
 		}
 		fin.close();
 	}
 }
 
 void PrintMenu() {
-	cout << "1. Загрузить из файла" << endl;
-	cout << "2. Создать трубу" << endl;
-	cout << "3. Создать компрессор" << endl;
-	cout << "4. Изменить статус трубы" << endl;
-	cout << "5. Вывести информацию" << endl;
-	cout << "6. Сохранить в файл" << endl;
-	cout << "7. Изменить компрессор" << endl;
-	cout << "8. Поиск трубы по имени" << endl;
-	cout << "9. Поиск трубы по статусу" << endl;
-	cout << "10. Поиск компрессорной станции по именми" << endl;
-	cout << "11. Поиск компрессорной станции по прорценту рабочих цехов" << endl;
-	cout << "0. Выход" << endl;
+	cout << "1. Создать трубу" << endl
+	     << "2. Создать компрессорную станцию" << endl
+	     << "3. Сохранить в файл" << endl
+	     << "4. Загрузить из файла" << endl
+	     << "5. Вывести информацию" << endl
+	     << "6. Изменить статус трубы" << endl
+	     << "7. Изменить компрессор" << endl
+	     << "8. Множественное редактирование труб" << endl
+	     << "9. Удалить трубу" << endl
+	     << "10. Удалить компрессорную станцию" << endl
+	     << "11. Поиск трубы по имени" << endl
+	     << "12. Поиск трубы по статусу" << endl
+	     << "13. Поиск компрессорной станции по именми" << endl
+	     << "14. Поиск компрессорной станции по прорценту рабочих цехов" << endl
+	     << endl
+	     << "0. Выход" << endl;
 }
+
+
+
 
 
 
