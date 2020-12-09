@@ -1,33 +1,90 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <unordered_map>
 #include "Truba.h"
 #include "CS.h"
+#include "utils.h"
 using namespace std;
+
+void save_to_file(const vector<Truba>& t, const vector<CS>& c) 
+{
+	ofstream fout;
+	string filename;
+	cout << "Введите имя файла:" << endl;
+	cin.ignore(256, '\n');
+	getline(cin, filename, '\n');
+	fout.open(filename, ios::out);
+	if (fout.is_open()) {
+		fout << t.size() << endl << c.size() << endl;
+		for (const Truba& it : t)
+		{
+			fout << it;
+		}
+		for (const CS& it : c)
+		{
+			fout << it;
+		}
+		fout.close();
+	}
+}
+
+void load_from_file(const vector <Truba>& t, const vector <CS>& c) 
+{
+	ifstream fin;
+	int countT, countC;
+	string filename;
+	cout << "Введите имя файла:" << std::endl;
+	cin.ignore(256, '\n');
+	getline(cin, filename, '\n');
+	fin.open(filename, ios::in);
+	if (fin.is_open()) {
+		fin >> countT >> countC;
+		t.reserve(countT);
+		c.reserve(countC);
+		for (int i = 0; i < countT; i++)
+		{
+			Truba LoadedTruba;
+			fin >> LoadedTruba;
+			t.push_back(LoadedTruba);
+		}
+		for (int i = 0; i < countC; i++)
+		{
+			CS LoadedCS;
+			fin >> LoadedCS;
+			c.push_back(LoadedCS);
+		}
+		fin.close();
+	}
+}
+
+void PrintMenu() {
+	cout << "1. Загрузить из файла" << endl;
+	cout << "2. Создать трубу" << endl;
+	cout << "3. Создать компрессор" << endl;
+	cout << "4. Изменить статус трубы" << endl;
+	cout << "5. Вывести информацию" << endl;
+	cout << "6. Сохранить в файл" << endl;
+	cout << "7. Изменить компрессор" << endl;
+	cout << "8. Поиск трубы по имени" << endl;
+	cout << "9. Поиск трубы по статусу" << endl;
+	cout << "10. Поиск компрессорной станции по именми" << endl;
+	cout << "11. Поиск компрессорной станции по прорценту рабочих цехов" << endl;
+	cout << "0. Выход" << endl;
+}
+
+
+
+
 
 
 
 /*
-struct truba {       //Стуктура тубы
-	int id;
-	double length;
-	double diameter;
-	bool repair;
-};
 
-struct cs 
-{                        //Структура компрессорной станции
-	int id;
-	string name;
-	int number_work;
-	int number_inwork;
-	double effect;
-};
-
-
-template <typename S>
-S get_value(S left_border, S right_border) {
-	S i;
+template <typename T>
+T get_value(T left_border, T right_border) {
+	T i;
 	cin >> i;
 	while (cin.fail() || i > right_border || i < left_border) {
 		cout << "Введите другое значение" << "(" << left_border << " - " << right_border << ")" << endl;
@@ -39,10 +96,10 @@ S get_value(S left_border, S right_border) {
 }
 
 
-truba create_truba() {
-	truba new_truba;
+Truba create_truba() {
+	Truba new_truba;
 	cout << "Введите диаметр: " << endl;
-	new_truba.diameter = get_value(1, 3000);
+	new_truba.diametr = get_value(1, 3000);
 	cout << "Ввелите длинну: " << endl;
 	new_truba.length = get_value(1, 10000);
 	new_truba.repair = false;
@@ -50,15 +107,15 @@ truba create_truba() {
 	return new_truba;
 }
 
-cs create_cs() {
-	cs new_cs;
+CS create_cs() {
+	CS new_cs;
 	cout << "Введите имя:";
 	cin.ignore(256, '\n');
 	getline(cin, new_cs.name, '\n');
 	cout << "Введите число цехов: " << endl;
-	new_cs.number_work = get_value(1, 100);
+	new_cs.work = get_value(1, 100);
 	cout << "Введите число работающих цехов: " << endl;
-	new_cs.number_inwork = get_value(0, new_cs.number_work);
+	new_cs.inwork = get_value(0, new_cs.work);
 	cout << "Введите эффективность: " << endl;
 	new_cs.effect = get_value(0, 100);
 	new_cs.id = 1;
