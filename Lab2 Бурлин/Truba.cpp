@@ -8,6 +8,11 @@ using namespace std;
 
 int Truba::Maxid = 0;
 
+int Truba::GetMaxid()
+{
+	return Maxid;
+}
+
 std::string Truba::GetName() const
 {
 	return name;
@@ -20,7 +25,7 @@ int Truba::Getid() const
 }
 
 
-int Truba::GetDiametr() const
+double Truba::GetDiametr() const
 {
 	return diametr;
 }

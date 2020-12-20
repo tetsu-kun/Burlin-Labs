@@ -6,6 +6,11 @@
 
 int CS::Maxid = 0;
 
+int CS::GetMaxid()
+{
+	return Maxid;
+}
+
 int CS::Getid() const
 {
 	return id;

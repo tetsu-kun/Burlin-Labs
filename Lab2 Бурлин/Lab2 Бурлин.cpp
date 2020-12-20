@@ -229,11 +229,24 @@ int main()
 
 		case 5:
 		{
+			for (const auto& it : Trubas) {
+				cout << it.second;
+			}
+			for (const auto& it : CSs) {
+				cout << it.second;
+			}
+			break;
 			break;
 		}
 
 		case 6:
 		{
+			cout << "id Трубы: " << endl;
+			unordered_map<int, Truba>::iterator iter = Trubas.find(get_value(0, Truba::GetMaxid()));
+			if (iter == Trubas.end())
+				cout << "Truba is not found" << endl;
+			else
+				iter->second.change_status();
 			break;
 		}
 

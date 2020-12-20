@@ -12,9 +12,10 @@ class CS
 	int inwork;
 	double effect;
 
+	static int Maxid;
 
 public:
-	static int Maxid;
+	static int GetMaxid();
 
 	std::string GetName() const;
 

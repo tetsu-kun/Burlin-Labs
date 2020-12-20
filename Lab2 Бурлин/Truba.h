@@ -13,15 +13,17 @@ class Truba
 	double diametr;
 	bool repair;
 
-public:
 	static int Maxid;
+
+public:
+	static int GetMaxid();
 
 	std::string GetName() const;
 	
 
 	int Getid() const;
 	
-	int GetDiametr() const;
+	double GetDiametr() const;
 	
 	double GetLength() const;
 	
