@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include "Truba.h"
 #include "CS.h"
 #include "utils.h"
@@ -56,6 +57,100 @@ void load_from_file(unordered_map <int, Truba>& t, unordered_map <int, CS>& c) {
 	}
 }
 
+
+
+
+template<typename T>
+bool del(unordered_map<int, T>& map, int id) {
+	return map.erase(id);
+}
+
+template<typename T>
+using FilterT = bool(*)(const Truba & t, T param);
+
+bool CheckByName(const Truba& t, string param) {
+	return t.GetName() == param;
+}
+bool CheckByStatus(const Truba& t, bool param) {
+	return t.GetStatus() == param;
+}
+
+template <typename T>
+vector<int> FindTrubaByFilter(const unordered_map<int, Truba>& map, FilterT<T> f, T param)
+	{
+	vector<int> res;
+	for (const auto& it : map) {
+		if (f(it.second, param)) {
+			res.push_back(it.first);
+		}
+	}
+	return res;
+}
+
+template<typename T>
+using FilterC = bool(*)(const CS& c, T param);
+
+bool CheckByName(const CS& c, string param) {
+	return c.GetName() == param;
+}
+bool CheckByPercent(const CS& c, double param) {
+	return (100.0 * (c.GetWork() - c.GetInWork()) / c.GetWork() >= param);
+}
+
+template <typename T>
+vector<int> FindCSByFilter(const unordered_map<int, CS>& map, FilterC<T> f, T param) {
+	vector<int> res;
+	for (const auto& it : map) {
+		if (f(it.second, param)) {
+			res.push_back(it.first);
+		}
+	}
+	return res;
+}
+
+
+void PacketRedactTrub(unordered_map<int, Truba>& map) {
+	cout << "\tВыберите какие трубы редактировать: " << endl;
+	cout << "\t1. По статусу в ремонте" << endl;
+	cout << "\t2. По статусу не в ремонте" << endl;
+	cout << "\t3. По выбору пользователя" << endl;
+	cout << "\t0. Назад" << endl;
+	switch (get_value(0, 3))
+	{
+	case 1:
+	{
+		for (int i : FindTrubaByFilter(map, CheckByStatus, true))
+			map.find(i)->second.change_status();
+		break;
+	}
+	case 2:
+	{
+		for (int i : FindTrubaByFilter(map, CheckByStatus, false))
+			map.find(i)->second.change_status();
+		break;
+	}
+	case 3: {
+		vector<int> vec;
+		while (1) {
+			cout << "Введите id" << endl;
+			vec.push_back(get_value(0, Truba::Maxid));
+			cout << "Добавить" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+			if (get_value(0, 1) == 0)
+				break;
+		}
+		for (auto i : vec) {
+			if (map.find(i) != map.end())
+				map.find(i)->second.change_status();
+		}
+		break;
+	}
+	case 0: {
+		return;
+	}
+	}
+}
+
+
 void PrintMenu() {
 	cout << "1. Создать трубу" << endl
 	     << "2. Создать компрессорную станцию" << endl
@@ -78,225 +173,206 @@ void PrintMenu() {
 
 
 
-
-
-
-
-
-
-/*
-
-template <typename T>
-T get_value(T left_border, T right_border) {
-	T i;
-	cin >> i;
-	while (cin.fail() || i > right_border || i < left_border) {
-		cout << "Введите другое значение" << "(" << left_border << " - " << right_border << ")" << endl;
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cin >> i;
-	}
-	return i;
-}
-
-
-Truba create_truba() {
-	Truba new_truba;
-	cout << "Введите диаметр: " << endl;
-	new_truba.diametr = get_value(1, 3000);
-	cout << "Ввелите длинну: " << endl;
-	new_truba.length = get_value(1, 10000);
-	new_truba.repair = false;
-	new_truba.id = 1;
-	return new_truba;
-}
-
-CS create_cs() {
-	CS new_cs;
-	cout << "Введите имя:";
-	cin.ignore(256, '\n');
-	getline(cin, new_cs.name, '\n');
-	cout << "Введите число цехов: " << endl;
-	new_cs.work = get_value(1, 100);
-	cout << "Введите число работающих цехов: " << endl;
-	new_cs.inwork = get_value(0, new_cs.work);
-	cout << "Введите эффективность: " << endl;
-	new_cs.effect = get_value(0, 100);
-	new_cs.id = 1;
-	return new_cs;
-}
-
-void print_truba_info(const truba& t)                       //Вывод в консоль информации о трубе
-{
-	cout << "Диаметр: " << t.diameter << endl;
-	cout << "Длина: " << t.length << endl;
-	cout << "id: " << t.id << endl;
-	cout << (t.repair ? "В ремонте" : "Не в ремонте") << endl;
-}
-
-void print_cs_info(const cs& c)                              //Вывод в консоль информации о КС
-{
-	cout << "Имя:" << c.name << endl;
-	cout << "Кол-во цехов: " << c.number_work << endl;
-	cout << "Кол-во рабочих цехов: " << c.number_inwork << endl;
-	cout << "Эффективность: " << c.effect << endl;
-}
-
-
-void change_status(bool& status) {                            //Изменение статуса трубы "в ремонте"
-	status = !status;
-}
-
-
-void save_to_fileTCS(truba t, cs c)                       //Сохранение в файл
-{
-	ofstream fout;
-	fout.open("Data.txt", ios::out);
-	if (fout.is_open()) {
-		fout << t.id << endl << t.diameter << endl << t.length << endl << t.repair << endl;
-		fout << c.id << endl << c.name << endl << c.number_work << endl << c.number_inwork << endl << c.effect;
-		fout.close();
-	}
-}
-
-
-
-
-truba load_from_fileT(ifstream& fin)
-{
-	truba t;
-	fin >> t.id >> t.diameter >> t.length >> t.repair;
-	return t;
-}
-
-cs load_from_fileC(ifstream& fin)
-{
-	cs c;
-	fin >> c.id;
-	fin.ignore(256, '\n');
-	getline(fin, c.name);
-	fin >> c.number_work >> c.number_inwork >> c.effect;
-	return c;
-}
-
-void load_from_fileTCS(truba& t, cs& c)
-{
-	ifstream fin;
-	fin.open("Data.txt", ios::in);
-	if (fin.is_open()) {
-		t = load_from_fileT(fin);
-		c = load_from_fileC(fin);
-		fin.close();
-	}
-}
-
-
-void stop_work(cs& c)
-{
-	if (c.number_inwork > 0) {
-		c.number_inwork--;
-	}
-	else {
-		cout << "Число работающих цехов: 0" << endl;
-	}
-}
-
-void continue_work(cs& c)
-{
-	if (c.number_inwork < c.number_work)
-	{
-		c.number_inwork++;
-	}
-	else
-	{
-		cout << "Все цеха работают" << endl;
-	}
-}
-
-
-
-void PrintMenu()
-{
-	cout << "1. Создать трубу" << endl;
-	cout << "2. Создать компрессорную станцию" << endl;
-	cout << "3. Вывести информацию" << endl;
-	cout << "4. Изменить состояние трубы" << endl;
-	cout << "5. Загрузить из файла" << endl;
-	cout << "6. Сохранить в файл" << endl;
-	cout << "7. Обновить компрессорную станцию" << endl;
-	cout << "0. Выход" << endl;
-}
-
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	cs c;
-	truba t;
-	int i;
-	while (1) {
+	unordered_map <int, Truba> Trubas;
+	unordered_map <int, CS> CSs;
+
+	while (1)
+	{
 		cout << "Выберите действие:" << endl;
 		PrintMenu();
-		cin >> i;
-		switch (i)
+		switch (get_value(0, 14))
 		{
 		case 1:
-			t = create_truba();
-			break;
-		case 2:
-			c = create_cs();
-			break;
-		case 3:
-			print_truba_info(t);
-			print_cs_info(c);
-			break;
-		case 4:
-			if (t.id == 1) {
-				change_status(t.repair);
-			}
-			else {
-				cout << "Трубы не существет" << endl;
-			}
-			break;
-		case 5:
-			load_from_fileTCS(t, c);
-			break;
-		case 6:
-			save_to_fileTCS(t, c);
-			break;
-		case 7:
-			if (c.id == 1) {
-				cout << "\t Выберите действие:" << endl;
-				cout << "\t 1. Начать" << endl;
-				cout << "\t 2. Остановить" << endl;
-				i = get_value(1, 2);
-				switch (i)
-				{
-				case 1:
-					continue_work(c);
+		{
+			while (1) 
+			{
+				Truba t;
+				cin >> t;
+				Trubas.insert({ t.Getid(), t });
+				cout << "Добавить?" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+				if (get_value(0, 1) == 0)
 					break;
-				case 2:
-					stop_work(c);
-					break;
-				default:
-					cout << "Выбирите действие " << endl;
-					break;
-				}
 			}
-			else {
-				cout << "Компрессорной станции не существует" << endl;
-			}
-
-			break;
-		case 0:
-			return 0;
-			break;
-		default:
-			cout << "Выберите действие: " << endl;
 			break;
 		}
+
+		case 2:
+		{
+			while (1)
+			{
+				CS c;
+				cin >> c;
+				CSs.insert({ c.Getid(), c });
+				cout << "Добавить?" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+				if (get_value(0, 1) == 0)
+					break;
+			}
+			break;
+		}
+
+		case 3:
+		{
+			save_to_file(Trubas, CSs);
+			break;
+		}
+
+		case 4:
+		{
+			load_from_file(Trubas, CSs);
+			break;
+			break;
+		}
+
+		case 5:
+		{
+			break;
+		}
+
+		case 6:
+		{
+			break;
+		}
+
+		case 7:
+		{
+			break;
+		}
+
+		case 8:
+		{
+			break;
+		}
+
+		case 9:
+		{
+			break;
+		}
+
+		case 10:
+		{
+			break;
+		}
+
+		case 11:
+		{
+			break;
+		}
+
+		case 12:
+		{
+			break;
+		}
+
+		case 13:
+		{
+			break;
+		}
+
+		case 14:
+		{
+			break;
+		}
+		}
+
+
 
 	}
 }
 
-*/
+
+
+
+
+
+
+
+//
+//void PrintMenu()
+//{
+//	cout << "1. Создать трубу" << endl;
+//	cout << "2. Создать компрессорную станцию" << endl;
+//	cout << "3. Вывести информацию" << endl;
+//	cout << "4. Изменить состояние трубы" << endl;
+//	cout << "5. Загрузить из файла" << endl;
+//	cout << "6. Сохранить в файл" << endl;
+//	cout << "7. Обновить компрессорную станцию" << endl;
+//	cout << "0. Выход" << endl;
+//}
+//
+//int main()
+//{
+//	setlocale(LC_ALL, "Russian");
+//
+//	cs c;
+//	truba t;
+//	int i;
+//	while (1) {
+//		cout << "Выберите действие:" << endl;
+//		PrintMenu();
+//		cin >> i;
+//		switch (i)
+//		{
+//		case 1:
+//			t = create_truba();
+//			break;
+//		case 2:
+//			c = create_cs();
+//			break;
+//		case 3:
+//			print_truba_info(t);
+//			print_cs_info(c);
+//			break;
+//		case 4:
+//			if (t.id == 1) {
+//				change_status(t.repair);
+//			}
+//			else {
+//				cout << "Трубы не существет" << endl;
+//			}
+//			break;
+//		case 5:
+//			load_from_fileTCS(t, c);
+//			break;
+//		case 6:
+//			save_to_fileTCS(t, c);
+//			break;
+//		case 7:
+//			if (c.id == 1) {
+//				cout << "\t Выберите действие:" << endl;
+//				cout << "\t 1. Начать" << endl;
+//				cout << "\t 2. Остановить" << endl;
+//				i = get_value(1, 2);
+//				switch (i)
+//				{
+//				case 1:
+//					continue_work(c);
+//					break;
+//				case 2:
+//					stop_work(c);
+//					break;
+//				default:
+//					cout << "Выбирите действие " << endl;
+//					break;
+//				}
+//			}
+//			else {
+//				cout << "Компрессорной станции не существует" << endl;
+//			}
+//
+//			break;
+//		case 0:
+//			return 0;
+//			break;
+//		default:
+//			cout << "Выберите действие: " << endl;
+//			break;
+//		}
+//
+//	}
+//}
+//
+//*/
