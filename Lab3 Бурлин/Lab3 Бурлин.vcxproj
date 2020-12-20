@@ -152,11 +152,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CS.cpp" />
+    <ClCompile Include="GTN.cpp" />
     <ClCompile Include="Lab3 Бурлин.cpp" />
     <ClCompile Include="Truba.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS.h" />
+    <ClInclude Include="GTN.h" />
     <ClInclude Include="Truba.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
