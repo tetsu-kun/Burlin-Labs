@@ -134,7 +134,7 @@ void PacketRedactTrub(unordered_map<int, Truba>& map) {
 		while (1) {
 			cout << "Введите id" << endl;
 			vec.push_back(get_value(0, Truba::GetMaxid()));
-			cout << "Добавить" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+			cout << "Добавить?" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
 			if (get_value(0, 1) == 0)
 				break;
 		}
@@ -338,7 +338,7 @@ int main()
 
 		case 13:
 		{
-			cout << "Vvedite name " << endl;
+			cout << "Введите имя " << endl;
 			string name;
 			cin.ignore(256, '\n');
 			getline(cin, name, '\n');

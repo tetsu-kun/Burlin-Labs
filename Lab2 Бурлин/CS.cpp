@@ -73,7 +73,7 @@ std::ostream& operator << (std::ostream& out, const CS& c) {
 		out << "Эффективность: " << c.effect << std::endl;
 	}
 	else {
-		out << "Компрессор не существует" << std::endl;
+		out << "Компрессорная станция не существует" << std::endl;
 	}
 	return out;
 }
