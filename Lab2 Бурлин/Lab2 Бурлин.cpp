@@ -150,33 +150,6 @@ void PacketRedactTrub(unordered_map<int, Truba>& map) {
 	}
 }
 
-//void() 
-//{
-//	cout << "Compressor id: " << endl;
-//	unordered_map<int, CS>::iterator iter = CSs.find(get_value(0, CS::GetMaxid()));
-//	if (iter == CSs.end()) {
-//		cout << "Compressor doesnt exist" << endl;
-//	}
-//	else {
-//		cout << "\t Select action:" << endl;
-//		cout << "\t 1. Start work" << endl;
-//		cout << "\t 2. Stop work" << endl;
-//		switch (get_value(1, 2))
-//		{
-//		case 1:
-//			iter->second.RunStation();
-//			break;
-//		case 2:
-//			iter->second.StopStation();
-//			break;
-//		default:
-//			cout << "Select valid action " << endl;
-//			break;
-//		}
-//	}
-//	break;
-//}
-//}
 
 
 void PrintMenu() {
@@ -281,8 +254,29 @@ int main()
 
 		case 7:
 		{
-
-		    break;
+			cout << "id компрессорной станици: " << endl;
+			unordered_map<int, CS>::iterator iter = CSs.find(get_value(0, CS::GetMaxid()));
+			if (iter == CSs.end()) {
+				cout << "Компрессорная станция не найдена!" << endl;
+			}
+			else {
+				cout << "\t Выберите действие:" << endl;
+				cout << "\t 1. Начать работы" << endl;
+				cout << "\t 2. Прекратить работу" << endl;
+				switch (get_value(1, 2))
+				{
+				case 1:
+					iter->second.continue_work();
+					break;
+				case 2:
+					iter->second.stop_work();
+					break;
+				default:
+					cout << "Выберите существующее действие!" << endl;
+					break;
+				}
+			}
+			break;
 		}
 
 		case 8:
@@ -355,7 +349,7 @@ int main()
 
 		case 14:
 		{
-			cout << "Введите процент нерабочих цехов:  " << endl;
+			cout << "Введите процент нерабочих цехов  " << endl;
 			for (int i : FindCSByFilter(CSs, CheckByPercent, get_value(0.0, 100.0))) 	cout << CSs.find(i)->second << endl;
 	
 			break;

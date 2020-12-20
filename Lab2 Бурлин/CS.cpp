@@ -40,6 +40,7 @@ double CS::GetEffect() const
 }
 
 
+
 void CS::stop_work()
 {
 	if (inwork > 0) {
