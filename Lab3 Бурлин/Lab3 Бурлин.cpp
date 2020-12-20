@@ -6,6 +6,7 @@
 #include "Truba.h"
 #include "CS.h"
 #include "utils.h"
+#include "GTN.h"
 using namespace std;
 
 void save_to_file(const unordered_map<int, Truba>& t, const unordered_map<int, CS>& c) {
@@ -167,6 +168,10 @@ void PrintMenu() {
 		<< "12. Поиск трубы по статусу" << endl
 		<< "13. Поиск компрессорной станции по именми" << endl
 		<< "14. Поиск компрессорной станции по прорценту рабочих цехов" << endl
+		<< "15. Добавление трубы в ГТС " << endl
+	    << "16. Добавление Компрессорной станции в ГТС" << endl
+		<< "17. " << endl
+		<< "18. " << endl
 		<< endl
 		<< "0. Выход" << endl;
 }
@@ -180,6 +185,8 @@ int main()
 
 	unordered_map <int, Truba> Trubas;
 	unordered_map <int, CS> CSs;
+
+	GTN GTN;
 
 	while (1)
 	{
@@ -352,6 +359,20 @@ int main()
 			cout << "Введите процент нерабочих цехов  " << endl;
 			for (int i : FindCSByFilter(CSs, CheckByPercent, get_value(0.0, 100.0))) 	cout << CSs.find(i)->second << endl;
 
+			break;
+		}
+
+		case 15:
+		{
+			cout << "Введите id трубы" << endl;
+			GTN.AddTruba(Trubas, get_value(0, Truba::GetMaxid()));
+			break;
+		}
+
+		case 16:
+		{
+			cout << "Введите id компрессорной станции" << endl;
+			GTN.AddCS(CSs, get_value(0, CS::GetMaxid()));
 			break;
 		}
 		}

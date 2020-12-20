@@ -45,7 +45,7 @@ void GTN::CreateAMatrix(unordered_map<int, CS>& mapCS, unordered_map<int, Truba>
 		cout << endl;
 	}
 }
-}
+
 
 void GTN::ConnectEdges(unordered_map<int, CS>&, unordered_map<int, Truba>&)
 {
