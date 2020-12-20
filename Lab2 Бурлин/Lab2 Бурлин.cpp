@@ -133,7 +133,7 @@ void PacketRedactTrub(unordered_map<int, Truba>& map) {
 		vector<int> vec;
 		while (1) {
 			cout << "Введите id" << endl;
-			vec.push_back(get_value(0, Truba::Maxid));
+			vec.push_back(get_value(0, Truba::GetMaxid()));
 			cout << "Добавить" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
 			if (get_value(0, 1) == 0)
 				break;
@@ -150,6 +150,34 @@ void PacketRedactTrub(unordered_map<int, Truba>& map) {
 	}
 }
 
+//void() 
+//{
+//	cout << "Compressor id: " << endl;
+//	unordered_map<int, CS>::iterator iter = CSs.find(get_value(0, CS::GetMaxid()));
+//	if (iter == CSs.end()) {
+//		cout << "Compressor doesnt exist" << endl;
+//	}
+//	else {
+//		cout << "\t Select action:" << endl;
+//		cout << "\t 1. Start work" << endl;
+//		cout << "\t 2. Stop work" << endl;
+//		switch (get_value(1, 2))
+//		{
+//		case 1:
+//			iter->second.RunStation();
+//			break;
+//		case 2:
+//			iter->second.StopStation();
+//			break;
+//		default:
+//			cout << "Select valid action " << endl;
+//			break;
+//		}
+//	}
+//	break;
+//}
+//}
+
 
 void PrintMenu() {
 	cout << "1. Создать трубу" << endl
@@ -158,7 +186,7 @@ void PrintMenu() {
 	     << "4. Загрузить из файла" << endl
 	     << "5. Вывести информацию" << endl
 	     << "6. Изменить статус трубы" << endl
-	     << "7. Изменить компрессор" << endl
+	     << "7. Изменить компрессорную станцию" << endl
 	     << "8. Множественное редактирование труб" << endl
 	     << "9. Удалить трубу" << endl
 	     << "10. Удалить компрессорную станцию" << endl
@@ -186,9 +214,10 @@ int main()
 		PrintMenu();
 		switch (get_value(0, 14))
 		{
+
 		case 1:
 		{
-			while (1) 
+			while (1)
 			{
 				Truba t;
 				cin >> t;
@@ -244,7 +273,7 @@ int main()
 			cout << "id Трубы: " << endl;
 			unordered_map<int, Truba>::iterator iter = Trubas.find(get_value(0, Truba::GetMaxid()));
 			if (iter == Trubas.end())
-				cout << "Truba is not found" << endl;
+				cout << "Труба не найдена!" << endl;
 			else
 				iter->second.change_status();
 			break;
@@ -252,41 +281,83 @@ int main()
 
 		case 7:
 		{
-			break;
+
+		    break;
 		}
 
 		case 8:
 		{
+			PacketRedactTrub(Trubas);
 			break;
 		}
 
 		case 9:
 		{
+			while (1) 
+			{
+				cout << "Ввдеите id " << endl;
+				if (del(Trubas, get_value(0, Truba::GetMaxid())))
+					cout << "Труба удалена" << endl;
+				else
+					cout << "Труба не удалена" << endl;
+				cout << "Удалить?" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+				if (get_value(0, 1) == 0)
+					break;
+			}
 			break;
 		}
 
 		case 10:
 		{
+			while (1)
+			{
+				cout << "Ввдеите id " << endl;
+				if (del(CSs, get_value(0, CS::GetMaxid())))
+					cout << "Компрессорная станция удалена" << endl;
+				else
+					cout << "Компрессорная станция не удалена" << endl;
+				cout << "Удалить?" << endl << "\t 0. Нет" << endl << "\t 1. Да" << endl;
+				if (get_value(0, 1) == 0)
+					break;
+			}
 			break;
 		}
 
 		case 11:
 		{
+			cout << "Введите имя трубы: " << endl;
+			string name;
+			cin.ignore(256, '\n');
+			getline(cin, name, '\n');
+			for (int i : FindTrubaByFilter<string>(Trubas, CheckByName, name)) {
+				cout << Trubas.find(i)->second << endl;
+			}
 			break;
 		}
 
 		case 12:
 		{
+			for (int i : FindTrubaByFilter(Trubas, CheckByStatus, true)) 	cout << Trubas.find(i)->second << endl;
+			
 			break;
 		}
 
 		case 13:
 		{
+			cout << "Vvedite name " << endl;
+			string name;
+			cin.ignore(256, '\n');
+			getline(cin, name, '\n');
+			for (int i : FindCSByFilter<string>(CSs, CheckByName, name))    cout << CSs.find(i)->second << endl;
+
 			break;
 		}
 
 		case 14:
 		{
+			cout << "Введите процент нерабочих цехов:  " << endl;
+			for (int i : FindCSByFilter(CSs, CheckByPercent, get_value(0.0, 100.0))) 	cout << CSs.find(i)->second << endl;
+	
 			break;
 		}
 		}
@@ -299,93 +370,3 @@ int main()
 
 
 
-
-
-
-
-//
-//void PrintMenu()
-//{
-//	cout << "1. Создать трубу" << endl;
-//	cout << "2. Создать компрессорную станцию" << endl;
-//	cout << "3. Вывести информацию" << endl;
-//	cout << "4. Изменить состояние трубы" << endl;
-//	cout << "5. Загрузить из файла" << endl;
-//	cout << "6. Сохранить в файл" << endl;
-//	cout << "7. Обновить компрессорную станцию" << endl;
-//	cout << "0. Выход" << endl;
-//}
-//
-//int main()
-//{
-//	setlocale(LC_ALL, "Russian");
-//
-//	cs c;
-//	truba t;
-//	int i;
-//	while (1) {
-//		cout << "Выберите действие:" << endl;
-//		PrintMenu();
-//		cin >> i;
-//		switch (i)
-//		{
-//		case 1:
-//			t = create_truba();
-//			break;
-//		case 2:
-//			c = create_cs();
-//			break;
-//		case 3:
-//			print_truba_info(t);
-//			print_cs_info(c);
-//			break;
-//		case 4:
-//			if (t.id == 1) {
-//				change_status(t.repair);
-//			}
-//			else {
-//				cout << "Трубы не существет" << endl;
-//			}
-//			break;
-//		case 5:
-//			load_from_fileTCS(t, c);
-//			break;
-//		case 6:
-//			save_to_fileTCS(t, c);
-//			break;
-//		case 7:
-//			if (c.id == 1) {
-//				cout << "\t Выберите действие:" << endl;
-//				cout << "\t 1. Начать" << endl;
-//				cout << "\t 2. Остановить" << endl;
-//				i = get_value(1, 2);
-//				switch (i)
-//				{
-//				case 1:
-//					continue_work(c);
-//					break;
-//				case 2:
-//					stop_work(c);
-//					break;
-//				default:
-//					cout << "Выбирите действие " << endl;
-//					break;
-//				}
-//			}
-//			else {
-//				cout << "Компрессорной станции не существует" << endl;
-//			}
-//
-//			break;
-//		case 0:
-//			return 0;
-//			break;
-//		default:
-//			cout << "Выберите действие: " << endl;
-//			break;
-//		}
-//
-//	}
-//}
-//
-//*/

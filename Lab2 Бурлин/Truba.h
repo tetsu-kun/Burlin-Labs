@@ -15,11 +15,12 @@ class Truba
 
 	static int Maxid;
 
+
 public:
-	static int GetMaxid();
 
 	std::string GetName() const;
 	
+	static int GetMaxid();
 
 	int Getid() const;
 	
