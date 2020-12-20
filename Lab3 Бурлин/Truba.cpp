@@ -42,11 +42,37 @@ bool Truba::GetStatus() const
 	return repair;
 }
 
+void Truba::SetStart(int new_start)
+{
+	start = new_start;
+}
+
+void Truba::SetEnd(int new_end)
+{
+	end = new_end;
+}
+
+int Truba::GetStart() const
+{
+	return start;
+}
+
+int Truba::GetEnd() const
+{
+	return end;
+}
+
+void Truba::ChangeUsed()
+{
+	used = !used;
+}
 
 void Truba::change_status()
 {
 	repair = !repair;
 }
+
+
 
 std::ostream& operator << (std::ostream& out, const Truba& t) {
 	if (t.id >= 0) {

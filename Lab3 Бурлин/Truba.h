@@ -15,6 +15,9 @@ class Truba
 
 	static int Maxid;
 
+	int start;
+	int end;
+	bool used;
 
 public:
 
@@ -31,6 +34,14 @@ public:
 	bool GetStatus() const;
 
 	void change_status();
+
+	void SetStart(int);
+	void SetEnd(int);
+
+	int GetStart() const;
+	int GetEnd() const;
+
+	void ChangeUsed();
 
 	friend std::ostream& operator << (std::ostream& out, const Truba& t);
 	friend std::istream& operator >> (std::istream& in, Truba& t);
