@@ -36,5 +36,7 @@ public:
 	void DeleteVertex(int);
 
 	void TopologicalSort(int, vector<int>&, bool&, vector<int>&);
+
+	void TopSort();
 	
 };
